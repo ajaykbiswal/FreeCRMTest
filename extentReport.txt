@@ -62,3 +62,4 @@ public static ExtentReports extent;
 	}
 
 }
+file:///C:/HRaas-Payroll_Automation/Form16/test-output/ExtentReport.html
