@@ -1,0 +1,64 @@
+public static ExtentReports extent;
+	public static ExtentTest logger;
+
+	@Override
+	public void onTestStart(ITestResult result) {
+		  System.out.println("on test start");
+		  logger=extent.startTest(result.getMethod().getMethodName());
+		  logger.log(LogStatus.INFO, result.getMethod().getMethodName() +" "+ "Test is Started");
+		  
+		
+	}
+
+	@Override
+	public void onTestSuccess(ITestResult result) {
+		System.out.println("on test success");
+		logger.log(LogStatus.PASS, result.getMethod().getMethodName() +" "+ "Test is Passed");
+		
+	}
+
+	@Override
+	public void onTestFailure(ITestResult result) {
+		System.out.println("on test failure");
+		logger.log(LogStatus.FAIL, result.getMethod().getMethodName() +" "+ "Test is Failed");
+//		logger.log(LogStatus.FAIL, result.getThrowable());
+		String screenshotName=TestUtil.getScreenshot(driver, result.getName());
+		logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotName));
+		
+	}
+
+	@Override
+	public void onTestSkipped(ITestResult result) {
+		System.out.println("on test skipped");
+        logger.log(LogStatus.SKIP, result.getMethod().getMethodName() + " "+  "Test is skipped");
+
+		
+	}
+
+	@Override
+	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
+		
+		
+	}
+
+	@Override
+	public void onStart(ITestContext context) {
+		
+		 System.out.println("on start");
+		  extent=new ExtentReports(System.getProperty("user.dir")+"/test-output/ExtentReport.html", true);
+		  extent.addSystemInfo("Selenium Version", "2.53");
+		  extent.addSystemInfo("Environment", "QA");
+ 
+
+	}
+
+	@Override
+	public void onFinish(ITestContext context) {
+		extent.endTest(logger);
+		extent.flush();
+//		extent.close();
+		driver.close();
+		
+	}
+
+}
